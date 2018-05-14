@@ -29,19 +29,24 @@
 ;; Hight light current line
 (global-hl-line-mode t)
 
-(defun dos2unix ()
-  "Not exactly but it's easier to remember"
-  (interactive)
-  (set-buffer-file-coding-system 'unix 't))
-
 ;; (add-to-list 'load-path "~/org-html5presentation.el")
 ;;(require 'ox-html5presentation)
 ;;(setq org-s5-theme "railscast")
+(use-package ecb
+  :ensure t)
+(require 'ecb)
+(setq ecb-tip-of-the-day nil)
+
+;; flyspell
+;;(add-hook 'org-mode-hook 'flyspell-mode)
+(use-package autopair
+  :config
+  (autopair-global-mode t))
+;;
 
 ;; ggtags
 (use-package ggtags
   :ensure t)
-
 (add-hook 'c-mode-common-hook
 	  (lambda ()
 	    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
@@ -49,13 +54,13 @@
 	      )
 	    )
 	  )
-;;(define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
-;;(define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
-;;(define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
-;;(define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
-;;(define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
-;;(define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
-;;(define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+
+(use-package google-c-style
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook 'google-set-c-style)
+  (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+  )
 
 ;; helm-gtags
 ;; Enable helm-gtags-mode
@@ -73,20 +78,6 @@
      (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
      (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
      ))
-;;JDEE
-;;(add-to-list 'load-path "~/.emacs.d/elpa/jdee-20170506.1514")
-;;(load "jdee")
-;;(add-hook 'jdee-mode-hook
-;;	  (lambda()
-;;	    (local-set-key [(control return)] 'jdee-complete)
-;;	    ))
-
-
-
-;; Bootstrap 'use-package
-;;(unless (package-installed-p 'use-package)
-;;  (package-refresh-contents)
-;;  (package-install 'use-package))
 
 (use-package org-bullets
   :ensure t
@@ -96,20 +87,6 @@
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (setq exec-path (append '("/usr/local/bin") exec-path))
 
-;;(require 'xcscope)
-;;(cscope-setup)
-
-;;(use-package xcscope
-;;  :ensure t
-;;  :config
-;;  (cscope-setup))
-
-;;(add-hook 'python-mode-hook 'jedi:setup)
-;;(setq jedi:complete-on-dot t)
-(use-package ecb
-  :ensure t)
-(require 'ecb)
-(setq ecb-tip-of-the-day nil)
 
 ;; CEDET
 ;;(global-ede-mode 1) ;;will conflict with ecb C-c . g [s|d|h]
@@ -128,31 +105,18 @@
 ;; Start yasnippet with emacs
 (require 'yasnippet)
 (yas-global-mode 1)
-;;(setq yas-snippet-dirs
-;;      '("~/.emacs.d/plugins/yasnippet/snippets")
-;;      )
+(require 'yasnippet-snippets)
+
 
 ;; Fix iedit bug in MAC
 (define-key global-map (kbd "C-c ;") 'iedit-mode)
 
-;; flyspell
-;;(add-hook 'org-mode-hook 'flyspell-mode)
-(use-package autopair
-  :config
-  (autopair-global-mode t))
-;;
-(use-package google-c-style
-  :ensure t
-  :config
-  (add-hook 'c-mode-common-hook 'google-set-c-style)
-  (add-hook 'c-mode-common-hook 'google-make-newline-indent)
-  )
+
 ;; set tab to 4 spaces
 (setq-default c-basic-offset 4
 	      tab-width 4
 	      indent-tabs-mode t)
 
-;;
 
 ;; orgmode 
 (eval-after-load 'org
@@ -196,7 +160,8 @@
 	(("/Volumes/jared-1/smart3" "Smart3-8.1")
 	 ("/Volumes/jared/smart2_plus" "smart2_plus")
 	 ("/Volumes/jared_huang/salt" "salt")
-	 ("/Volumes/ExternalSD/smart2_plus_local" "smart2_plus_SD"))))
+	 ("/Volumes/SD/smart2_plus_local" "smart2_plus_SD")
+	 ("/Volumes/SD/minidlna-git" "minidlna"))))
  '(jdee-compiler (quote ("javac")))
  '(jdee-jdk-registry
    (quote
@@ -259,4 +224,10 @@
   "Insert a nicely formated date string."
   (interactive)
   (insert (format-time-string "/**\n * %b %d %Y, Jared Huang\n * End \n */\n")))
+
+(defun dos2unix ()
+  "Not exactly but it's easier to remember"
+  (interactive)
+  (set-buffer-file-coding-system 'unix 't))
+
 
