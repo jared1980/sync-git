@@ -6,6 +6,8 @@
 (setenv "LC_ALL" "en_US.UTF-8")
 (setenv "LANG" "en_US.UTF-8")
 ;;
+;; set font size to n/10 pt
+(set-face-attribute 'default nil :height 140)
 
 ;; Package
 (require 'package)
